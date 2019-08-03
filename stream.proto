@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package stream;
+
+message SetValueRequest {
+  string key = 1;
+  string value = 2;
+}
+
+message SetValueResponse {
+}
+
+service Test {
+  rpc SetValue(SetValueRequest) returns (SetValueResponse) {}
+}
