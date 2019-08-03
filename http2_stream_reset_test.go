@@ -20,7 +20,7 @@ const http2Port = 7777
 
 func TestHTTP2StreamReset(t *testing.T) {
 	startHTTP2Server()
-	proxyPort := startHTTP2ReverseProxy()
+	proxyPort := startHTTP2ReverseProxy(http2Port)
 
 	client := &http.Client{
 		Timeout: time.Second,
@@ -80,8 +80,8 @@ func startHTTP2Server() {
 	go server.Serve(ln)
 }
 
-func startHTTP2ReverseProxy() int {
-	rpURL, err := url.Parse(fmt.Sprintf("http://localhost:%d", http2Port))
+func startHTTP2ReverseProxy(p int) int {
+	rpURL, err := url.Parse(fmt.Sprintf("http://localhost:%d", p))
 	panicOnError(err)
 	proxy := httputil.NewSingleHostReverseProxy(rpURL)
 	proxy.Transport = &http2.Transport{

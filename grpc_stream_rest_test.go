@@ -16,7 +16,7 @@ const grpcPort = 8888
 
 func TestGRPCStreamReset(t *testing.T) {
 	startGRPCServer()
-	proxyPort := startHTTP2ReverseProxy()
+	proxyPort := startHTTP2ReverseProxy(grpcPort)
 
 	tests := []struct {
 		msg  string
