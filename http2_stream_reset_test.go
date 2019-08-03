@@ -81,6 +81,7 @@ func startHTTP2Server() {
 }
 
 func startHTTP2ReverseProxy(p int) int {
+	fmt.Printf("starting reverse proxy with single backend port: %d\n", p)
 	rpURL, err := url.Parse(fmt.Sprintf("http://localhost:%d", p))
 	panicOnError(err)
 	proxy := httputil.NewSingleHostReverseProxy(rpURL)
