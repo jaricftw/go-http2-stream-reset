@@ -64,17 +64,14 @@ func TestHTTP2StreamReset(t *testing.T) {
 func startHTTP2Server() {
 	h1Handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "hello world returned by handler")
-		panic(http.ErrAbortHandler)
+		//panic(http.ErrAbortHandler)
 	})
-	h2Server := &http2.Server{}
-	h2Handler := h2c.NewHandler(h1Handler, h2Server)
 
 	ln, err := net.Listen("tcp", fmt.Sprintf(":%d", http2Port))
 	panicOnError(err)
 
 	server := &http.Server{
-		Addr:    ln.Addr().String(),
-		Handler: h2Handler,
+		Handler: h2c.NewHandler(h1Handler, &http2.Server{}),
 	}
 
 	go server.Serve(ln)
@@ -101,7 +98,6 @@ func startHTTP2ReverseProxy(p int) int {
 	panicOnError(err)
 
 	proxyServer := &http.Server{
-		Addr:    ln.Addr().String(),
 		Handler: proxy,
 	}
 
