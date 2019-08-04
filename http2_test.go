@@ -31,6 +31,7 @@ func TestHTTP2StreamReset(t *testing.T) {
 			},
 		},
 	}
+	defer client.CloseIdleConnections()
 
 	tests := []struct {
 		msg  string
@@ -54,6 +55,7 @@ func TestHTTP2StreamReset(t *testing.T) {
 			resp, err := client.Do(req)
 			t.Logf("got err: %v", err)
 			t.Logf("got resp: %v", resp)
+			require.NoError(t, err)
 			if err == nil {
 				t.Logf("got reseponse body: %s", getResponseBody(t, resp))
 			}
@@ -64,7 +66,6 @@ func TestHTTP2StreamReset(t *testing.T) {
 func startHTTP2Server() {
 	h1Handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "hello world returned by handler")
-		//panic(http.ErrAbortHandler)
 	})
 
 	ln, err := net.Listen("tcp", fmt.Sprintf(":%d", http2Port))
