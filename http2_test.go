@@ -99,7 +99,7 @@ func startHTTP2ReverseProxy(p int) int {
 	panicOnError(err)
 
 	proxyServer := &http.Server{
-		Handler: proxy,
+		Handler: h2c.NewHandler(proxy, &http2.Server{}),
 	}
 
 	go proxyServer.Serve(ln)
